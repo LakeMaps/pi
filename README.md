@@ -17,7 +17,7 @@ Build the image
 From inside the Vagrant VM:
 
 ```
-sudo time bash script/buildscript
+sudo time script/buildscript
 ```
 
 Flash the image
