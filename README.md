@@ -1,4 +1,4 @@
 Raspberries
 ===========
 
-This repository contains custom Raspbian images.
+This repository contains (one or more) custom Raspbian images.
