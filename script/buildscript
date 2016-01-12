@@ -24,7 +24,7 @@ download_raspbian_jessie_lite() {
 build_docker_image_with_name() {
     local name="$1"
 
-    docker build -t "$name" .
+    docker build --rm=true --tag="$name" .
 }
 
 execute_in_partition_context() {
