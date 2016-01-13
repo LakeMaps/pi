@@ -45,6 +45,8 @@ execute_in_partition_context() {
 update_linux() {
     cp /usr/bin/qemu-arm-static ./usr/bin
 
+    cp -r "$dir"/files/* .
+
     tar -cf ../raspbian.tar .
 }
 
