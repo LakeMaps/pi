@@ -68,8 +68,7 @@ build_custom_image() {
     bootp_offset=$(fdisk -l raspbian.img | awk -f "$dir"/fdisk-offsets.awk | awk '/FAT32/ { print $2 }')
     execute_in_partition_context "$linux_offset" 'ext4' update_linux
     execute_in_partition_context "$bootp_offset" 'vfat' update_bootp
-
-    build_docker_image_with_name eer/raspbian
 }
 
 build_custom_image
+build_docker_image_with_name 'eer/raspbian'
