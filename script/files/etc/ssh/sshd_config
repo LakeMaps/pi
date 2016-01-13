@@ -70,6 +70,7 @@ X11DisplayOffset 10
 PrintMotd no
 PrintLastLog yes
 TCPKeepAlive yes
+UseDNS no
 #UseLogin no
 
 #MaxStartups 10:30:60
