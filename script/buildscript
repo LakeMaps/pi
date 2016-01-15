@@ -23,8 +23,9 @@ download_raspbian_jessie_lite() {
 
 build_docker_image_with_name() {
     local name="$1"
+    local dockerfile="${2:-Dockerfile}"
 
-    docker build --rm=true --tag="$name" .
+    docker build --rm=true --tag="$name" --file="$dockerfile" .
 }
 
 execute_in_partition_context() {
@@ -71,4 +72,5 @@ build_custom_image() {
 }
 
 build_custom_image
-build_docker_image_with_name 'eer/raspbian'
+build_docker_image_with_name 'eer/raspbian:x86' Dockerfile.x86
+build_docker_image_with_name 'eer/raspbian:arm'
