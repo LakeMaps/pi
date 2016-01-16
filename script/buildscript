@@ -55,6 +55,9 @@ execute_in_container() {
 update_linux() {
     cp /usr/bin/qemu-arm-static ./usr/bin
 
+    execute_in_container apt-get -y purge 'libraspberrypi-doc'
+    execute_in_container apt-get -y clean
+    execute_in_container apt-get -y autoremove
     tar -cf ../raspbian.tar .
 
     curl -O 'http://downloads.hypriot.com/docker-hypriot_1.9.1-1_armhf.deb'
