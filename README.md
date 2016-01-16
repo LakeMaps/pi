@@ -14,10 +14,10 @@ Flashing a custom Raspbian image onto an SD card is a two-step process:
 Build the image
 ---------------
 
-From inside the Vagrant VM:
+Run:
 
 ```
-sudo time script/buildscript
+vagrant ssh --command "cd workspace && sudo script/buildscript"
 ```
 
 Flash the image

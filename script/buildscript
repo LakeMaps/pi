@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+set -e
+
+download_raspbian_jessie_lite() {
+    local destination_image_name="$1"
+
+    [[ -f "$destination_image_name" ]] && return 0
+
+    wget --no-clobber --quiet --show-progress \
+        'https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2015-11-24/2015-11-21-raspbian-jessie-lite.zip'
+    checksum=$(openssl dgst -SHA1 2015-11-21-raspbian-jessie-lite.zip | awk '{ print $2 }')
+    if [[ $checksum != '97888fcd9bfbbae2a359b0f1d199850852bf0104' ]]
+    then
+        printf '%s\n' 'Bad checksum for download' >&2
+        return 1
+    fi
+
+    unzip 2015-11-21-raspbian-jessie-lite.zip
+    rm 2015-11-21-raspbian-jessie-lite.zip
+    mv 2015-11-21-raspbian-jessie-lite.img "$destination_image_name"
+}
+
+build_docker_image_with_name() {
+    local name="$1"
+
+    docker build --rm=true --tag="$name" .
+}
+
+execute_in_partition_context() {
+    local partition_offset="$1"
+    local partition_format="$2"
+    shift 2
+    local rootfs
+    rootfs=$(basename "$(mktemp --dry-run)")
+
+    mkdir -p "$rootfs"
+    mount -v -o offset="$partition_offset" -t "$partition_format" raspbian.img "$rootfs"
+    pushd "$rootfs"
+        "$@"
+    popd
+    umount "$rootfs" && rmdir "$rootfs"
+}
+
+update_linux() {
+    cp /usr/bin/qemu-arm-static ./usr/bin
+
+    cp -r "$dir"/files/* .
+
+    tar -cf ../raspbian.tar .
+}
+
+update_bootp() {
+    truncate -s0 config.txt
+    {
+        printf '%s\n' 'dtparam=i2c_arm=on'
+        printf '%s\n' 'dtparam=spi=on'
+        printf '%s\n' 'gpu_mem=128' 'start_x=1'
+    } >> config.txt
+}
+
+build_custom_image() {
+    local dir
+    dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+    download_raspbian_jessie_lite 'raspbian.img'
+    linux_offset=$(fdisk -l raspbian.img | awk -f "$dir"/fdisk-offsets.awk | awk '/Linux/ { print $2 }')
+    bootp_offset=$(fdisk -l raspbian.img | awk -f "$dir"/fdisk-offsets.awk | awk '/FAT32/ { print $2 }')
+    execute_in_partition_context "$linux_offset" 'ext4' update_linux
+    execute_in_partition_context "$bootp_offset" 'vfat' update_bootp
+}
+
+build_custom_image
+build_docker_image_with_name 'eer/raspbian'
