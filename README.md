@@ -33,6 +33,10 @@ On OS X, you can run open Disk Utility to find the device name of your SD card r
 script/flash-osx $device
 ```
 
+For the device name, Disk Utility will display it in the bottom-left corner when looking at your SD card reader:
+
+![Disk utility screenshot](https://cloud.githubusercontent.com/assets/1623628/12372939/dfd7c22c-bc42-11e5-91c3-6e85b720dfb4.png)
+
 For example, if (as in the image above) your device name is `disk2`, you would execute:
 
 ```
