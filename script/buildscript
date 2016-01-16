@@ -55,6 +55,8 @@ execute_in_container() {
 update_linux() {
     cp /usr/bin/qemu-arm-static ./usr/bin
 
+    tar -cf ../raspbian.tar .
+
     curl -O 'http://downloads.hypriot.com/docker-hypriot_1.9.1-1_armhf.deb'
     checksum=$(openssl dgst -SHA256 docker-hypriot_1.9.1-1_armhf.deb | awk '{ print $2 }')
     if [[ $checksum != '65c99bdf1d206b1affe6e95342b68ee3ba179e968b24c514a4666d6caa8e720d' ]]
@@ -67,8 +69,6 @@ update_linux() {
     fi
     rm ./docker-hypriot_1.9.1-1_armhf.deb
     cp -r "$dir"/files/* .
-
-    tar -cf ../raspbian.tar .
 }
 
 update_bootp() {
