@@ -92,5 +92,5 @@ build_custom_image() {
 }
 
 build_custom_image
-build_docker_image_with_name 'eer/raspbian:x86' Dockerfile.x86
-build_docker_image_with_name 'eer/raspbian:arm'
+build_docker_image_with_name 'localhost:5000/raspbian:x86' Dockerfile.x86
+build_docker_image_with_name 'localhost:5000/raspbian:arm'
