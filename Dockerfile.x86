@@ -1,0 +1,4 @@
+FROM scratch
+ADD raspbian.tar /
+RUN rm /etc/ld.so.preload
+CMD ["bash"]

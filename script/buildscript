@@ -23,8 +23,9 @@ download_raspbian_jessie_lite() {
 
 build_docker_image_with_name() {
     local name="$1"
+    local dockerfile="${2:-Dockerfile}"
 
-    docker build --rm=true --tag="$name" .
+    docker build --rm=true --tag="$name" --file="$dockerfile" .
 }
 
 execute_in_partition_context() {
@@ -42,12 +43,35 @@ execute_in_partition_context() {
     umount "$rootfs" && rmdir "$rootfs"
 }
 
+execute_in_container() {
+    local preload="ld.so.preload"
+
+    cp ./etc/$preload ../$preload
+    truncate -s0 ./etc/$preload
+    systemd-nspawn --directory "$(pwd)" "$@"
+    mv ../$preload ./etc/$preload
+}
+
 update_linux() {
     cp /usr/bin/qemu-arm-static ./usr/bin
 
-    cp -r "$dir"/files/* .
-
+    execute_in_container apt-get -y purge 'libraspberrypi-doc'
+    execute_in_container apt-get -y clean
+    execute_in_container apt-get -y autoremove
     tar -cf ../raspbian.tar .
+
+    curl -O 'http://downloads.hypriot.com/docker-hypriot_1.9.1-1_armhf.deb'
+    checksum=$(openssl dgst -SHA256 docker-hypriot_1.9.1-1_armhf.deb | awk '{ print $2 }')
+    if [[ $checksum != '65c99bdf1d206b1affe6e95342b68ee3ba179e968b24c514a4666d6caa8e720d' ]]
+    then
+        printf '%s\n' 'Bad checksum for download' 'Skipping Docker install' >&2
+    else
+        execute_in_container dpkg --install docker-hypriot_1.9.1-1_armhf.deb
+        execute_in_container systemctl enable docker.service
+        execute_in_container usermod -aG docker pi
+    fi
+    rm ./docker-hypriot_1.9.1-1_armhf.deb
+    cp -r "$dir"/files/* .
 }
 
 update_bootp() {
@@ -71,4 +95,5 @@ build_custom_image() {
 }
 
 build_custom_image
-build_docker_image_with_name 'eer/raspbian'
+build_docker_image_with_name 'localhost:5000/raspbian:x86' Dockerfile.x86
+build_docker_image_with_name 'localhost:5000/raspbian:arm'

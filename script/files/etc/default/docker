@@ -1,0 +1,3 @@
+# Docker Upstart and SysVinit configuration file
+
+DOCKER_OPTS="--storage-driver=overlay -D --insecure-registry=192.168.88.0/24"
