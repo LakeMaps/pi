@@ -56,8 +56,4 @@ Vagrant.configure(2) do |config|
     config.vm.provision "shell", privileged: false, inline: %(
         sudo usermod -aG docker $(whoami)
     )
-
-    config.vm.provider "virtualbox" do |virtualbox|
-        virtualbox.linked_clone = true
-    end
 end
