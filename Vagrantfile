@@ -43,17 +43,8 @@ Vagrant.configure(2) do |config|
 
     network config
 
-    config.vm.provision "shell", inline: %(
-        apt-get update
-        apt-get -y dist-upgrade
-        apt-get -y install linux-image-extra-$(uname -r)
-        apt-get -y install qemu-user-static zip
+    config.vm.provision "docker"
 
-        curl -sO 'https://apt.dockerproject.org/repo/pool/main/d/docker-engine/docker-engine_1.9.1-0~vivid_amd64.deb'
-        dpkg -i docker-engine_1.9.1-0~vivid_amd64.deb && rm docker-engine_1.9.1-0~vivid_amd64.deb
-    )
-
-    config.vm.provision "shell", privileged: false, inline: %(
-        sudo usermod -aG docker $(whoami)
-    )
+    config.vm.provision "shell", name: "Install QEMU and zip",
+        inline: "{ apt-get update && apt-get -y install qemu-user-static zip ; } &> /dev/null"
 end
