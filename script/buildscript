@@ -21,13 +21,6 @@ download_raspbian_jessie_lite() {
     mv 2015-11-21-raspbian-jessie-lite.img "$destination_image_name"
 }
 
-build_docker_image_with_name() {
-    local name="$1"
-    local dockerfile="${2:-Dockerfile}"
-
-    docker build --rm=true --tag="$name" --file="$dockerfile" .
-}
-
 execute_in_partition_context() {
     local partition_offset="$1"
     local partition_format="$2"
@@ -58,7 +51,6 @@ update_linux() {
     execute_in_container apt-get -y purge 'libraspberrypi-doc'
     execute_in_container apt-get -y clean
     execute_in_container apt-get -y autoremove
-    tar -cf ../raspbian.tar .
 
     curl -O 'http://downloads.hypriot.com/docker-hypriot_1.9.1-1_armhf.deb'
     checksum=$(openssl dgst -SHA256 docker-hypriot_1.9.1-1_armhf.deb | awk '{ print $2 }')
@@ -95,5 +87,3 @@ build_custom_image() {
 }
 
 build_custom_image
-build_docker_image_with_name 'localhost:5000/raspbian:x86' Dockerfile.x86
-build_docker_image_with_name 'localhost:5000/raspbian:arm'
