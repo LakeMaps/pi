@@ -16,9 +16,8 @@ download_raspbian_jessie_lite() {
         return 1
     fi
 
-    unzip 2015-11-21-raspbian-jessie-lite.zip
-    rm 2015-11-21-raspbian-jessie-lite.zip
-    mv 2015-11-21-raspbian-jessie-lite.img "$destination_image_name"
+    unzip 2016-03-18-raspbian-jessie-lite.zip
+    mv 2016-03-18-raspbian-jessie-lite.img "$destination_image_name"
 }
 
 execute_in_partition_context() {
