@@ -21,14 +21,15 @@ download_raspbian_jessie_lite() {
 }
 
 execute_in_partition_context() {
-    local partition_offset="$1"
-    local partition_format="$2"
-    shift 2
+    local image_name="$1"
+    local partition_offset="$2"
+    local partition_format="$3"
+    shift 3
     local rootfs
     rootfs=$(basename "$(mktemp --dry-run)")
 
     mkdir -p "$rootfs"
-    mount -v -o offset="$partition_offset" -t "$partition_format" raspbian.img "$rootfs"
+    mount -v -o offset="$partition_offset" -t "$partition_format" "$image_name" "$rootfs"
     pushd "$rootfs"
         "$@"
     popd
@@ -45,6 +46,7 @@ execute_in_container() {
 }
 
 update_linux() {
+    local readonly hostname=${IMAGE_HOSTNAME:-raspberrypi}
     cp /usr/bin/qemu-arm-static ./usr/bin
 
     execute_in_container apt-get -y purge 'libraspberrypi-doc'
@@ -52,6 +54,12 @@ update_linux() {
     execute_in_container apt-get -y autoremove
 
     cp -r "$dir"/files/* .
+
+    printf '%s\n' $hostname > etc/hostname
+    {
+        printf '%s\n' "127.0.0.1 localhost"
+        printf '%s\n' "127.0.1.1 $hostname"
+    } > etc/hosts
 }
 
 update_bootp() {
@@ -64,14 +72,14 @@ update_bootp() {
 }
 
 build_custom_image() {
-    local dir
-    dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    local readonly dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    local readonly hostname=${IMAGE_HOSTNAME:-raspberrypi}
 
-    download_raspbian_jessie_lite 'raspbian.img'
-    linux_offset=$(fdisk -l raspbian.img | awk -f "$dir"/fdisk-offsets.awk | awk '/Linux/ { print $2 }')
-    bootp_offset=$(fdisk -l raspbian.img | awk -f "$dir"/fdisk-offsets.awk | awk '/FAT32/ { print $2 }')
-    execute_in_partition_context "$linux_offset" 'ext4' update_linux
-    execute_in_partition_context "$bootp_offset" 'vfat' update_bootp
+    download_raspbian_jessie_lite "raspbian-$hostname.img"
+    linux_offset=$(fdisk -l "raspbian-$hostname.img" | awk -f "$dir"/fdisk-offsets.awk | awk '/Linux/ { print $2 }')
+    bootp_offset=$(fdisk -l "raspbian-$hostname.img" | awk -f "$dir"/fdisk-offsets.awk | awk '/FAT32/ { print $2 }')
+    execute_in_partition_context "raspbian-$hostname.img" "$linux_offset" 'ext4' update_linux
+    execute_in_partition_context "raspbian-$hostname.img" "$bootp_offset" 'vfat' update_bootp
 }
 
 build_custom_image

@@ -17,7 +17,7 @@ Build the image
 Run:
 
 ```
-vagrant ssh --command "cd workspace && sudo script/buildscript"
+vagrant ssh --command "cd workspace && IMAGE_HOSTNAME=rasprime sudo -E script/buildscript"
 ```
 
 Flash the image
