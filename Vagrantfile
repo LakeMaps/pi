@@ -43,8 +43,6 @@ Vagrant.configure(2) do |config|
 
     network config
 
-    config.vm.provision "docker"
-
     config.vm.provision "shell", name: "Install QEMU and zip",
         inline: "{ apt-get update && apt-get -y install qemu-user-static zip ; } &> /dev/null"
 end
