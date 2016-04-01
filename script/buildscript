@@ -8,9 +8,9 @@ download_raspbian_jessie_lite() {
     [[ -f "$destination_image_name" ]] && return 0
 
     wget --no-clobber --quiet --show-progress \
-        'https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2015-11-24/2015-11-21-raspbian-jessie-lite.zip'
-    checksum=$(openssl dgst -SHA1 2015-11-21-raspbian-jessie-lite.zip | awk '{ print $2 }')
-    if [[ $checksum != '97888fcd9bfbbae2a359b0f1d199850852bf0104' ]]
+        'https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2016-03-18/2016-03-18-raspbian-jessie-lite.zip'
+    checksum=$(openssl dgst -SHA1 2016-03-18-raspbian-jessie-lite.zip | awk '{ print $2 }')
+    if [[ $checksum != 'b78bb50bdac5ec8c108f34104f788e214ac23635' ]]
     then
         printf '%s\n' 'Bad checksum for download' >&2
         return 1
