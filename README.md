@@ -17,7 +17,8 @@ Build the image
 Run:
 
 ```
-vagrant ssh --command "cd workspace && IMAGE_HOSTNAME=rasprime sudo -E script/buildscript"
+IMAGE_HOSTNAME=rasprime # change this as needed!
+vagrant ssh --command "cd workspace && IMAGE_HOSTNAME=$IMAGE_HOSTNAME sudo -E script/buildscript"
 ```
 
 Flash the image
@@ -30,7 +31,7 @@ Flashing the SD card must be done from the host machine, and mostly follows from
 On OS X, you can run open Disk Utility to find the device name of your SD card reader, and execute the following in the terminal:
 
 ```
-script/flash-osx $device
+script/flash-osx $image $device
 ```
 
 For the device name, Disk Utility will display it in the bottom-left corner when looking at your SD card reader:
