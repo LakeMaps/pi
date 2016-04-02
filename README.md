@@ -16,7 +16,7 @@ Build the image
 
 Run:
 
-```
+```bash
 IMAGE_HOSTNAME=rasprime # change this as needed!
 vagrant ssh --command "cd workspace && IMAGE_HOSTNAME=$IMAGE_HOSTNAME sudo -E script/buildscript"
 ```
