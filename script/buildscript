@@ -67,6 +67,7 @@ update_bootp() {
     {
         printf '%s\n' 'dtparam=i2c_arm=on'
         printf '%s\n' 'dtparam=spi=on'
+        printf '%s\n' 'disable_camera_led=1'
         printf '%s\n' 'gpu_mem=128' 'start_x=1'
     } >> config.txt
 }
