@@ -10,6 +10,7 @@ Flashing a custom Raspbian image onto an SD card is a two-step process:
 
 1. Build the image inside the VM
 2. Flash the image onto a SD card from the host machine
+3. Run `sudo raspi-config --expand-rootfs` on the Pi
 
 Build the image
 ---------------
