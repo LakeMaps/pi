@@ -1,6 +1,6 @@
 # How to contribute
 
-Eastern Edge welcomes contributions from everyone. By contributing to this project, you agree to the license terms of the project.
+By contributing to this project, you agree to the license terms of the project.
 
 In brief, contributing involves the following process:
 
