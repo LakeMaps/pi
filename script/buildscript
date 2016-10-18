@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
+set -u
 
 download_raspbian_jessie_lite() {
     local destination_image_name="$1"
