@@ -1,0 +1,10 @@
+notifications:
+    email: false
+
+addons:
+    apt:
+        packages:
+            - shellcheck
+
+script:
+    - shellcheck script/buildscript
