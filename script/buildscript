@@ -48,7 +48,7 @@ execute_in_container() {
 }
 
 update_linux() {
-    local readonly hostname=${IMAGE_HOSTNAME:-raspberrypi}
+    local -r hostname=${IMAGE_HOSTNAME:-raspberrypi}
     cp /usr/bin/qemu-arm-static ./usr/bin
 
     execute_in_container apt-get -y purge 'libraspberrypi-doc'
@@ -75,8 +75,8 @@ update_bootp() {
 }
 
 build_custom_image() {
-    local readonly dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    local readonly hostname=${IMAGE_HOSTNAME:-raspberrypi}
+    local -r dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    local -r hostname=${IMAGE_HOSTNAME:-raspberrypi}
 
     download_raspbian_jessie_lite "raspbian-$hostname.img"
     linux_offset=$(fdisk -l "raspbian-$hostname.img" | awk -f "$dir"/fdisk-offsets.awk | awk '/Linux/ { print $2 }')
