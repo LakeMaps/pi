@@ -57,7 +57,7 @@ update_linux() {
 
     cp -r "$dir"/files/* .
 
-    printf '%s\n' $hostname > etc/hostname
+    printf '%s\n' "$hostname" > etc/hostname
     {
         printf '%s\n' "127.0.0.1 localhost"
         printf '%s\n' "127.0.1.1 $hostname"
