@@ -1,7 +1,6 @@
 notifications:
     email: false
 
-dist: trusty
 addons:
     apt:
         packages:
