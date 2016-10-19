@@ -1,7 +1,6 @@
 # See <https://docs.vagrantup.com/v2/networking/public_network.html>
 NETWORK_INTERFACES = [
     "en3: Thunderbolt Ethernet",
-    "Killer e2200 PCI-E Gigabit Ethernet Controller (NDIS 6.20)",
 ]
 
 def interface_name(interface)
@@ -35,7 +34,6 @@ def network(config)
 end
 
 Vagrant.configure(2) do |config|
-    config.vm.hostname = "raspberries"
     config.vm.box = "ubuntu/wily64"
 
     config.vm.synced_folder ".", "/vagrant", disabled: true
