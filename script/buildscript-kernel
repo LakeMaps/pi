@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+set -e
+set -u
+set -o pipefail
+
+readonly KERNEL_OUTPUT_DIRECTORY=$1
+
+build_kernel() {
+    curl -s 'https://www.kernel.org/pub/linux/kernel/projects/rt/4.4/patch-4.4.25-rt35.patch.gz' \
+        | gunzip \
+        | patch -p1
+
+    make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- bcm2709_defconfig
+    make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- menuconfig
+    time make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- -j $(( $(nproc) * 3 / 2 )) zImage modules dtbs
+}
+
+output_image() {
+    mkdir -p "$KERNEL_OUTPUT_DIRECTORY"/{boot,lib}
+    make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- INSTALL_MOD_PATH="$KERNEL_OUTPUT_DIRECTORY" modules_install
+    scripts/mkknlimg arch/arm/boot/zImage "$KERNEL_OUTPUT_DIRECTORY/boot/$KERNEL.img"
+    cp -r arch/arm/boot/dts/*.dtb "$KERNEL_OUTPUT_DIRECTORY/boot/"
+    cp -r arch/arm/boot/dts/overlays "$KERNEL_OUTPUT_DIRECTORY/boot/"
+}
+
+build_kernel
+output_image
