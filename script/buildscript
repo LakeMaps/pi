@@ -65,6 +65,7 @@ update_linux() {
 
     cp -r "$dir"/files/etc/* etc/
     cp -r "$dir"/files/lib/* lib/
+    find lib/modules/ -type l -delete
 
     printf '%s\n' "$hostname" > etc/hostname
     {
