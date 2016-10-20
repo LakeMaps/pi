@@ -63,7 +63,8 @@ update_linux() {
     execute_in_container apt-get -y clean
     execute_in_container apt-get -y autoremove
 
-    cp -r "$dir"/files/* .
+    cp -r "$dir"/files/etc/* etc/
+    cp -r "$dir"/files/lib/* lib/
 
     printf '%s\n' "$hostname" > etc/hostname
     {
@@ -73,6 +74,7 @@ update_linux() {
 }
 
 update_bootp() {
+    cp -r "$dir"/files/boot/* .
     truncate -s0 config.txt
     {
         printf '%s\n' 'dtparam=spi=on'
