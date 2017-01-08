@@ -19,7 +19,7 @@ Run:
 
 ```bash
 IMAGE_HOSTNAME=foo # ???
-vagrant ssh --command "cd workspace && IMAGE_HOSTNAME=$IMAGE_HOSTNAME sudo -E script/buildscript"
+vagrant ssh --command "cd /vagrant && IMAGE_HOSTNAME=$IMAGE_HOSTNAME sudo -E script/buildscript"
 ```
 
 Flash the image

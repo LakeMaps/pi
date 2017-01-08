@@ -34,7 +34,7 @@ def network(config)
 end
 
 Vagrant.configure(2) do |config|
-    config.vm.box = "ubuntu/wily64"
+    config.vm.box = "ubuntu/xenial64"
 
     config.vm.synced_folder ".", "/vagrant", disabled: true
     config.vm.synced_folder ".", "/home/vagrant/workspace"
