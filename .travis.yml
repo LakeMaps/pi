@@ -1,6 +1,7 @@
 notifications:
     email: false
 
+language: generic
 addons:
     apt:
         sources:
