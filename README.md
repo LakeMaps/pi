@@ -25,7 +25,7 @@ vagrant ssh --command "cd /vagrant && IMAGE_HOSTNAME=$IMAGE_HOSTNAME sudo -E scr
 Flash the image
 ---------------
 
-Flashing the SD card must be done from the host machine, and mostly follows from [the instructions available on the Raspberry Pi Documentation](https://www.raspberrypi.org/documentation/installation/installing-images/README.md). Use the `raspbian.img` file found in the current working directory.
+Flashing the SD card must be done from the host machine, and mostly follows from [the instructions available on the Raspberry Pi Documentation](https://www.raspberrypi.org/documentation/installation/installing-images/README.md). Use the disk image file found in the current working directory.
 
 ### OS X
 
