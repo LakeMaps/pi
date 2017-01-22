@@ -32,7 +32,7 @@ Flashing the SD card must be done from the host machine, and mostly follows from
 On OS X, you can run open Disk Utility to find the device name of your SD card reader, and execute the following in the terminal:
 
 ```
-script/flash-osx $image $device
+script/flash-osx "$image" "$device"
 ```
 
 For the device name, Disk Utility will display it in the bottom-left corner when looking at your SD card reader:
@@ -42,7 +42,7 @@ For the device name, Disk Utility will display it in the bottom-left corner when
 For example, if (as in the image above) your device name is `disk2`, you would execute:
 
 ```
-script/flash-osx disk2
+script/flash-osx "$image" disk2
 ```
 
 Note: the above script spawns a root process (`dd`) to allow it to write to the device. You will need to enter your password when prompted.
