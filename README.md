@@ -18,7 +18,7 @@ Build the image
 Run:
 
 ```bash
-IMAGE_HOSTNAME=foo # ???
+IMAGE_HOSTNAME=test1 # ???
 vagrant ssh --command "cd /vagrant && IMAGE_HOSTNAME=$IMAGE_HOSTNAME sudo -E script/buildscript"
 ```
 
