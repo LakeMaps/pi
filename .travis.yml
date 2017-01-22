@@ -10,4 +10,4 @@ addons:
             - shellcheck
 
 script:
-    - shellcheck script/buildscript
+    - shellcheck script/buildscript{,-kernel}

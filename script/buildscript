@@ -22,6 +22,14 @@ download_raspbian_jessie_lite() {
     mv 2016-11-25-raspbian-jessie-lite.img "$destination_image_name"
 }
 
+build_kernel_image() {
+    local -r tag=$(basename "$(mktemp --dry-run)" | awk '{print tolower($0)}')
+
+    docker build --tag "$tag" "$dir"
+    docker run --rm -it -v "$dir":/opt "$tag" /opt/{buildscript-kernel,files}
+    docker rmi "$tag"
+}
+
 execute_in_partition_context() {
     local image_name="$1"
     local partition_offset="$2"
@@ -56,7 +64,9 @@ update_linux() {
     execute_in_container apt-get -y autoremove
     execute_in_container systemctl enable ssh
 
-    cp -r "$dir"/files/* .
+    cp -r "$dir"/files/etc/* etc/
+    cp -r "$dir"/files/lib/* lib/
+    find lib/modules/ -type l -delete
 
     printf '%s\n' "$hostname" > etc/hostname
     {
@@ -66,6 +76,7 @@ update_linux() {
 }
 
 update_bootp() {
+    cp -r "$dir"/files/boot/* .
     truncate -s0 config.txt
     {
         printf '%s\n' 'dtparam=spi=on'
@@ -77,6 +88,7 @@ build_custom_image() {
     local -r hostname=${IMAGE_HOSTNAME:-raspberrypi}
 
     download_raspbian_jessie_lite "raspbian-$hostname.img"
+    build_kernel_image
     linux_offset=$(fdisk -l "raspbian-$hostname.img" | awk -f "$dir"/fdisk-offsets.awk | awk '/Linux/ { print $2 }')
     bootp_offset=$(fdisk -l "raspbian-$hostname.img" | awk -f "$dir"/fdisk-offsets.awk | awk '/FAT32/ { print $2 }')
     execute_in_partition_context "raspbian-$hostname.img" "$linux_offset" 'ext4' update_linux
