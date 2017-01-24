@@ -57,6 +57,8 @@ update_linux() {
     execute_in_container systemctl enable ssh
 
     cp -r "$dir"/files/* .
+    execute_in_container systemctl enable gpio-reboot
+    execute_in_container systemctl enable gpio-poweroff
 
     printf '%s\n' "$hostname" > etc/hostname
     {

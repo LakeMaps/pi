@@ -1,0 +1,11 @@
+[Unit]
+Description=Reboot via GPIO PIN #24
+
+[Service]
+User=root
+TimeoutStartSec=0
+Restart=on-failure
+ExecStart=/usr/local/bin/gpio-command 24 reboot
+
+[Install]
+WantedBy=multi-user.target
