@@ -71,6 +71,7 @@ update_bootp() {
     truncate -s0 config.txt
     {
         printf '%s\n' 'dtparam=spi=on'
+        printf '%s\n' 'dtoverlay=gpio-poweroff,gpiopin=4'
     } >> config.txt
 }
 
