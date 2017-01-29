@@ -1,0 +1,11 @@
+[Unit]
+Description=Poweroff via GPIO PIN #23
+
+[Service]
+User=root
+TimeoutStartSec=0
+Restart=on-failure
+ExecStart=/usr/local/bin/gpio-command 23 poweroff
+
+[Install]
+WantedBy=multi-user.target

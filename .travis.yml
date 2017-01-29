@@ -10,4 +10,9 @@ addons:
             - shellcheck
 
 script:
-    - shellcheck script/buildscript
+    - (
+        for file in $(find script -type f -exec awk -f script/has-shebang.awk {} +);
+        do
+            ( set -x; shellcheck "${file}" );
+        done
+      )

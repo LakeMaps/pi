@@ -57,6 +57,8 @@ update_linux() {
     execute_in_container systemctl enable ssh
 
     cp -r "$dir"/files/* .
+    execute_in_container systemctl enable gpio-reboot
+    execute_in_container systemctl enable gpio-poweroff
 
     printf '%s\n' "$hostname" > etc/hostname
     {
@@ -69,6 +71,7 @@ update_bootp() {
     truncate -s0 config.txt
     {
         printf '%s\n' 'dtparam=spi=on'
+        printf '%s\n' 'dtoverlay=gpio-poweroff,gpiopin=4'
     } >> config.txt
 }
 
