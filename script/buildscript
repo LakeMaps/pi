@@ -52,6 +52,10 @@ update_linux() {
     local -r hostname=${IMAGE_HOSTNAME:-raspberrypi}
     cp /usr/bin/qemu-arm-static ./usr/bin
 
+    execute_in_container apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0x219BD9C9
+    execute_in_container sh -c "printf '%s\n' 'deb http://repos.azulsystems.com/debian stable main' > /etc/apt/sources.list.d/zulu.list"
+    execute_in_container apt-get -y update
+    execute_in_container apt-get -y install zulu-embedded-8
     execute_in_container apt-get -y purge 'libraspberrypi-doc'
     execute_in_container apt-get -y clean
     execute_in_container apt-get -y autoremove
