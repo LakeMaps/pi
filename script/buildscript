@@ -55,9 +55,9 @@ update_linux() {
     execute_in_container apt-get -y purge 'libraspberrypi-doc'
     execute_in_container apt-get -y clean
     execute_in_container apt-get -y autoremove
-    execute_in_container systemctl enable ssh
 
     cp -r "$dir"/files/* .
+    execute_in_container systemctl enable ssh
     execute_in_container systemctl enable gpio-reboot
     execute_in_container systemctl enable gpio-poweroff
 
