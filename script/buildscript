@@ -7,20 +7,21 @@ set -o pipefail
 
 download_raspbian_jessie_lite() {
     local destination_image_name="$1"
+    local -r base_image_version="2017-04-10"
 
     [[ -f "$destination_image_name" ]] && return 0
 
     wget --no-clobber --quiet --show-progress \
-        'https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2016-11-29/2016-11-25-raspbian-jessie-lite.zip'
-    checksum=$(openssl dgst -SHA1 2016-11-25-raspbian-jessie-lite.zip | awk '{ print $2 }')
-    if [[ $checksum != '6741a30d674d39246302a791f1b7b2b0c50ef9b7' ]]
+        "https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-$base_image_version/$base_image_version-raspbian-jessie-lite.zip"
+    checksum=$(openssl dgst -SHA1 "$base_image_version-raspbian-jessie-lite.zip" | awk '{ print $2 }')
+    if [[ $checksum != 'c24a4c7dd1a5957f303193fee712d0d2c0c6372d' ]]
     then
         printf '%s\n' 'Bad checksum for download' >&2
         return 1
     fi
 
-    unzip 2016-11-25-raspbian-jessie-lite.zip
-    mv 2016-11-25-raspbian-jessie-lite.img "$destination_image_name"
+    unzip "$base_image_version-raspbian-jessie-lite.zip"
+    mv "$base_image_version-raspbian-jessie-lite.img" "$destination_image_name"
 }
 
 execute_in_partition_context() {
