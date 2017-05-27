@@ -1,0 +1,11 @@
+[Unit]
+Description=Boat Control Software
+
+[Service]
+User=pi
+TimeoutStartSec=0
+Restart=on-failure
+ExecStart=/opt/boat/bin/boat 192.168.1.101 /dev/ttyACM1 /dev/ttyACM0
+
+[Install]
+WantedBy=multi-user.target
