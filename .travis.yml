@@ -1,6 +1,8 @@
 notifications:
     email: false
 
+dist: trusty
+sudo: false
 language: generic
 addons:
     apt:
