@@ -5,6 +5,13 @@ set -e
 set -u
 set -o pipefail
 
+decrypt_file() {
+    local -r file_name="$1"
+    local -r pass_env="IMAGE_BUILD_PASSWORD"
+
+    openssl enc -d -aes-256-cbc -a -salt -pass "env:${pass_env}" -in "${file_name}" -out "${file_name%%.enc}"
+}
+
 download_raspbian_jessie_lite() {
     local destination_image_name="$1"
     local -r base_image_version="2017-04-10"
@@ -61,6 +68,8 @@ update_linux() {
     execute_in_container apt-get -y clean
     execute_in_container apt-get -y autoremove
 
+    export -f decrypt_file
+    find "$dir"/files -type f -name '*.enc' -exec bash -x -c 'decrypt_file "$0"' {} \;
     cp -r "$dir"/files/* .
     execute_in_container systemctl enable ssh
     execute_in_container systemctl enable gpio-reboot
