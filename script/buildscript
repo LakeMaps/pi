@@ -78,6 +78,7 @@ update_bootp() {
     {
         printf '%s\n' 'dtparam=spi=on'
         printf '%s\n' 'dtoverlay=gpio-poweroff,gpiopin=4'
+        printf '%s\n' 'dtoverlay=dwc2'
     } >> config.txt
     truncate -s0 cmdline.txt
     {
@@ -90,6 +91,7 @@ update_bootp() {
             'elevator=deadline'
             'fsck.repair=yes'
             'rootwait'
+            'modules-load=dwc2,g_ether'
             'quiet'
             'init=/usr/lib/raspi-config/init_resize.sh'
         )
