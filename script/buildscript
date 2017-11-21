@@ -87,25 +87,7 @@ update_bootp() {
     {
         printf '%s\n' 'dtparam=spi=on'
         printf '%s\n' 'dtoverlay=gpio-poweroff,gpiopin=4'
-        printf '%s\n' 'dtoverlay=dwc2'
     } >> config.txt
-    truncate -s0 cmdline.txt
-    {
-        kernel_opts=(
-            'dwc_otg.lpm_enable=0'
-            'console=serial0,115200'
-            'console=tty1'
-            'root=PARTUUID=84fa8189-02'
-            'rootfstype=ext4'
-            'elevator=deadline'
-            'fsck.repair=yes'
-            'rootwait'
-            'modules-load=dwc2,g_ether'
-            'quiet'
-            'init=/usr/lib/raspi-config/init_resize.sh'
-        )
-        printf '%s\n' "${kernel_opts[*]}"
-    } >> cmdline.txt
 }
 
 build_custom_image() {
