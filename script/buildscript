@@ -52,7 +52,7 @@ execute_in_container() {
 
     cp ./etc/$preload ../$preload
     truncate -s0 ./etc/$preload
-    systemd-nspawn --directory "$(pwd)" "$@"
+    systemd-nspawn --directory "$PWD" "$@"
     mv ../$preload ./etc/$preload
 }
 
