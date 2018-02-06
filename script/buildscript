@@ -87,6 +87,7 @@ update_bootp() {
     {
         printf '%s\n' 'dtparam=spi=on'
         printf '%s\n' 'dtoverlay=gpio-poweroff,gpiopin=4'
+        printf '%s\n' 'enable_uart=1'
     } >> config.txt
 }
 
